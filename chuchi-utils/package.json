@@ -1,0 +1,33 @@
+{
+	"name": "chuchi-utils",
+	"version": "0.1.0",
+	"author": "Sören Meier <info@soerenmeier.ch>",
+	"type": "module",
+	"scripts": {
+		"check": "prettier -c .",
+		"lint": "eslint ./src",
+		"build": "tsc",
+		"watch": "tsc -w"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/chuchi-dev/chuchi-js"
+	},
+	"license": "MIT or Apache-2.0",
+	"module": "dist/index.js",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": "./dist/index.js",
+		"./collections/SlotArray": "./dist/collections/SlotArray.js",
+		"./sync/Barrier": "./dist/sync/Barrier.js",
+		"./sync/Listeners": "./dist/sync/Listeners.js",
+		"./sync/NonConcurrent": "./dist/sync/NonConcurrent.js",
+		"./sync/Latest": "./dist/sync/Latest.js",
+		"./utils/colors": "./dist/utils/colors.js"
+	},
+	"devDependencies": {
+		"tslib": "^2.6.2",
+		"typescript": "^5.2.2"
+	}
+}
