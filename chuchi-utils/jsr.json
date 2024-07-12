@@ -1,0 +1,14 @@
+{
+	"name": "@chuchi/utils",
+	"version": "0.1.1",
+	"exports": {
+		".": "./src/index.ts",
+		"./collections/SlotArray": "./src/collections/SlotArray.ts",
+		"./sync/Barrier": "./src/sync/Barrier.ts",
+		"./sync/Listeners": "./src/sync/Listeners.ts",
+		"./sync/NonConcurrent": "./src/sync/NonConcurrent.ts",
+		"./sync/Latest": "./src/sync/Latest.ts",
+		"./colors": "./src/colors.ts",
+		"./search": "./src/search.ts"
+	}
+}

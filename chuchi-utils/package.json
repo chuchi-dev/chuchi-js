@@ -1,6 +1,6 @@
 {
 	"name": "chuchi-utils",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"author": "Sören Meier <info@soerenmeier.ch>",
 	"type": "module",
 	"scripts": {
@@ -24,7 +24,8 @@
 		"./sync/Listeners": "./dist/sync/Listeners.js",
 		"./sync/NonConcurrent": "./dist/sync/NonConcurrent.js",
 		"./sync/Latest": "./dist/sync/Latest.js",
-		"./utils/colors": "./dist/utils/colors.js"
+		"./colors": "./dist/colors.js",
+		"./search": "./dist/search.js"
 	},
 	"devDependencies": {
 		"tslib": "^2.6.2",
