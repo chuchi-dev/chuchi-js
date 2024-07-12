@@ -2,7 +2,9 @@
 	"name": "chuchi-workspace",
 	"type": "module",
 	"workspaces": [
-		"chuchi-utils"
+		"chuchi-utils",
+		"chuchi-core",
+		"chuchi"
 	],
 	"scripts": {
 		"check": "npm run check --workspaces",

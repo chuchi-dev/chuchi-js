@@ -1,0 +1,33 @@
+{
+	"name": "chuchi",
+	"version": "0.1.0",
+	"author": "Sören Meier <info@soerenmeier.ch>",
+	"type": "module",
+	"scripts": {
+		"check": "prettier -c .",
+		"lint": "eslint ./src",
+		"build": "tsc",
+		"watch": "tsc -w"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/chuchi-dev/chuchi-js"
+	},
+	"license": "MIT or Apache-2.0",
+	"module": "dist/index.js",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": "./dist/index.js",
+		"./ssr": "./dist/ssr/index.js",
+		"./stores": "./dist/stores/index.js"
+	},
+	"dependencies": {
+		"chuchi-utils": "^0.1.0",
+		"chuchi-core": "^0.1.0"
+	},
+	"devDependencies": {
+		"tslib": "^2.6.2",
+		"typescript": "^5.2.2"
+	}
+}

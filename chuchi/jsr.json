@@ -1,0 +1,9 @@
+{
+	"name": "@chuchi/chuchi",
+	"version": "0.1.0",
+	"exports": {
+		".": "./src/index.ts",
+		"./ssr": "./src/ssr/index.ts",
+		"./stores": "./src/stores/index.ts"
+	}
+}
