@@ -1,0 +1,31 @@
+{
+	"name": "chuchi-core",
+	"version": "0.1.0",
+	"author": "Sören Meier <info@soerenmeier.ch>",
+	"type": "module",
+	"scripts": {
+		"check": "prettier -c .",
+		"lint": "eslint ./src",
+		"build": "tsc",
+		"watch": "tsc -w"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/chuchi-dev/chuchi-js"
+	},
+	"license": "MIT or Apache-2.0",
+	"exports": {
+		"./api/Api": "./dist/api/Api.js",
+		"./api/ApiError": "./dist/api/ApiError.js",
+		"./api/Stream": "./dist/api/Stream.js",
+		"./graphQl/GraphQl": "./dist/graphQl/GraphQl.js",
+		"./graphQl/GraphQlError": "./dist/graphQl/GraphQlError.js"
+	},
+	"dependencies": {
+		"chuchi-utils": "^0.1.0"
+	},
+	"devDependencies": {
+		"tslib": "^2.6.2",
+		"typescript": "^5.2.2"
+	}
+}
