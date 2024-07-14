@@ -1,6 +1,6 @@
 {
 	"name": "chuchi",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"author": "Sören Meier <info@soerenmeier.ch>",
 	"type": "module",
 	"scripts": {
@@ -20,7 +20,8 @@
 	"exports": {
 		".": "./dist/index.js",
 		"./ssr": "./dist/ssr/index.js",
-		"./stores": "./dist/stores/index.js"
+		"./stores": "./dist/stores/index.js",
+		"./api": "./dist/api.js"
 	},
 	"dependencies": {
 		"chuchi-utils": "^0.1.0",
