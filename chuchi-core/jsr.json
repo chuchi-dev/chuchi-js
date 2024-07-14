@@ -1,8 +1,7 @@
 {
 	"name": "@chuchi/core",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"exports": {
-		".": "./src/index.ts",
 		"./api/Api": "./src/api/Api.ts",
 		"./api/ApiError": "./src/api/ApiError.ts",
 		"./api/Stream": "./src/api/Stream.ts",
