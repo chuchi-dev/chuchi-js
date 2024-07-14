@@ -4,7 +4,8 @@
 	"workspaces": [
 		"chuchi-utils",
 		"chuchi-core",
-		"chuchi"
+		"chuchi",
+		"chuchi-legacy"
 	],
 	"scripts": {
 		"check": "npm run check --workspaces",

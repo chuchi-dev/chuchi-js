@@ -1,12 +1,11 @@
 {
 	"name": "@chuchi/core",
-	"version": "0.1.0",
+	"version": "1.0.2",
 	"exports": {
-		".": "./src/index.ts",
-		"./api/Api": "./src/api/Api.ts",
-		"./api/ApiError": "./src/api/ApiError.ts",
-		"./api/Stream": "./src/api/Stream.ts",
-		"./graphQl/GraphQl": "./src/graphQl/GraphQl.ts",
-		"./graphQl/GraphQlError": "./src/graphQl/GraphQlError.ts"
+		"./time/Date": "./src/time/Date.ts",
+		"./time/DateTime": "./src/time/DateTime.ts",
+		"./time/DateTimeRange": "./src/time/DateTimeRange.ts",
+		"./time/Duration": "./src/time/Duration.ts",
+		"./time/localization": "./src/time/localization.ts"
 	}
 }

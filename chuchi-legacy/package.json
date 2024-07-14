@@ -1,6 +1,6 @@
 {
 	"name": "chuchi-legacy",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"author": "Sören Meier <info@soerenmeier.ch>",
 	"type": "module",
 	"scripts": {
