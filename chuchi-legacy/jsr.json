@@ -1,0 +1,12 @@
+{
+	"name": "@chuchi/core",
+	"version": "0.1.0",
+	"exports": {
+		".": "./src/index.ts",
+		"./api/Api": "./src/api/Api.ts",
+		"./api/ApiError": "./src/api/ApiError.ts",
+		"./api/Stream": "./src/api/Stream.ts",
+		"./graphQl/GraphQl": "./src/graphQl/GraphQl.ts",
+		"./graphQl/GraphQlError": "./src/graphQl/GraphQlError.ts"
+	}
+}
