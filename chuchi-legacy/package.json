@@ -19,7 +19,9 @@
 		"./time/DateTime": "./dist/time/DateTime.js",
 		"./time/DateTimeRange": "./dist/time/DateTimeRange.js",
 		"./time/Duration": "./dist/time/Duration.js",
-		"./time/localization": "./dist/time/localization.js"
+		"./time/localization": "./dist/time/localization.js",
+		"./dom/Context2d": "./dist/dom/Context2d.js",
+		"./dom/utils": "./dist/dom/utils.js"
 	},
 	"dependencies": {
 		"chuchi-utils": "^0.1.0"
