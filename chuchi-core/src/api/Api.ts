@@ -82,7 +82,7 @@ export default class Api {
 			if (urlStr.startsWith(DEF_ORIGIN))
 				urlStr = urlStr.substring(DEF_ORIGIN.length);
 
-			const resp = await fetch(url, fetchParams);
+			const resp = await fetch(urlStr, fetchParams);
 
 			opts.responseStatus = resp.status;
 			opts.responseHeaders = resp.headers;
