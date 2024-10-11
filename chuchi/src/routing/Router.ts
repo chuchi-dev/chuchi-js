@@ -47,6 +47,8 @@ export default class Router {
 	 * currentRequest is a store which stores the current request
 	 *
 	 * Never set this request manually
+	 *
+	 * This might update without a new request (for example calling pushReq)
 	 */
 	currentRequest: Writable<Request>;
 
@@ -146,12 +148,12 @@ export default class Router {
 	 * Replaces the state of the current request
 	 */
 	replaceState(state: any = {}) {
-		// todo should this trigger a request change?
 		this.currentRequest.get().state = state;
 		window.history.replaceState(
 			this.currentRequest.get().toHistoryState(),
 			'',
 		);
+		this.currentRequest.notify();
 	}
 
 	/**
@@ -160,6 +162,7 @@ export default class Router {
 	pushReq(req: Request) {
 		this.currentRequest.setSilent(req);
 		window.history.pushState(req.toHistoryState(), '', req.uri);
+		this.currentRequest.notify();
 	}
 
 	/**
@@ -168,6 +171,7 @@ export default class Router {
 	replaceReq(req: Request) {
 		this.currentRequest.setSilent(req);
 		window.history.replaceState(req.toHistoryState(), '', req.uri);
+		this.currentRequest.notify();
 	}
 
 	/**

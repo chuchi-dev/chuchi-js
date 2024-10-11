@@ -46,4 +46,11 @@ export default class Writable<T> {
 	setSilent(inner: T) {
 		this.inner = inner;
 	}
+
+	/**
+	 * Notifies all subscribed listeners of a change in the stored value.
+	 */
+	notify() {
+		this.listeners.trigger(this.inner);
+	}
 }
