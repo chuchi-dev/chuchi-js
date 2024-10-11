@@ -21,7 +21,8 @@
 		".": "./dist/index.js",
 		"./ssr": "./dist/ssr/index.js",
 		"./stores": "./dist/stores/index.js",
-		"./api": "./dist/api.js"
+		"./api": "./dist/api.js",
+		"./cookies": "./dist/cookies/index.js"
 	},
 	"dependencies": {
 		"chuchi-utils": "^0.1.0",
