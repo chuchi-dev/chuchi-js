@@ -92,12 +92,13 @@ export default class Stream {
 	/// Starts to connect if there is no connection.
 	///
 	/// ## Throws
-	/// Or if there was an issue with the address.
+	/// If the connection failed instantly or if there was an issue with the address.
 	connect() {
 		if (this.ws) throw new ApiError('Other', 'Connection already started');
 
 		const addr = this._addr();
 
+		// this throws if the connection fails instantly
 		this.ws = new WebSocket(addr);
 
 		const onOpen = () => {
@@ -136,7 +137,7 @@ export default class Stream {
 			this.ws.removeEventListener('open', onOpen);
 			this.ws.removeEventListener('message', onMessage);
 			this.ws.removeEventListener('error', onError);
-			this.ws.removeEventListener('error', onClose);
+			this.ws.removeEventListener('close', onClose);
 			this.ws = null;
 
 			this.closeListeners.trigger();
@@ -146,7 +147,7 @@ export default class Stream {
 
 			// As noted in the comment of the class we treat this event as
 			// a close event if the connection was opened.
-			if (!this.connected) {
+			if (this.connected) {
 				// trigger the close event
 				close();
 				return;
