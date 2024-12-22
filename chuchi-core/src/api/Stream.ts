@@ -146,8 +146,8 @@ export default class Stream {
 			this.errorListeners.trigger(e);
 
 			// As noted in the comment of the class we treat this event as
-			// a close event if the connection was opened.
-			if (this.connected) {
+			// a close event if the connection was not opened.
+			if (!this.connected) {
 				// trigger the close event
 				close();
 				return;
