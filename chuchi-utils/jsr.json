@@ -1,6 +1,7 @@
 {
 	"name": "@chuchi/utils",
 	"version": "0.1.4",
+	"license": "MIT or Apache-2.0",
 	"exports": {
 		".": "./src/index.ts",
 		"./collections/SlotArray": "./src/collections/SlotArray.ts",

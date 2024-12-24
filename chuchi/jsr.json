@@ -1,6 +1,7 @@
 {
 	"name": "@chuchi/chuchi",
 	"version": "0.1.0",
+	"license": "MIT or Apache-2.0",
 	"exports": {
 		".": "./src/index.ts",
 		"./ssr": "./src/ssr/index.ts",

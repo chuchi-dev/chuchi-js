@@ -1,6 +1,7 @@
 {
 	"name": "@chuchi/core",
 	"version": "0.1.1",
+	"license": "MIT or Apache-2.0",
 	"exports": {
 		"./api/Api": "./src/api/Api.ts",
 		"./api/ApiError": "./src/api/ApiError.ts",

@@ -1,6 +1,7 @@
 {
 	"name": "@chuchi/legacy",
 	"version": "1.0.2",
+	"license": "MIT or Apache-2.0",
 	"exports": {
 		"./time/Date": "./src/time/Date.ts",
 		"./time/DateTime": "./src/time/DateTime.ts",
