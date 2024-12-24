@@ -1,5 +1,5 @@
 {
-	"name": "@chuchi/core",
+	"name": "@chuchi/legacy",
 	"version": "1.0.2",
 	"exports": {
 		"./time/Date": "./src/time/Date.ts",

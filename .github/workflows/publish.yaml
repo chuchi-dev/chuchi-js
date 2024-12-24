@@ -62,10 +62,9 @@ jobs:
           cd ${PACKAGE_FOLDER} # Navigate to the correct package folder
           echo "Publishing package from ${PACKAGE_FOLDER} with version ${VERSION}"
           npm publish --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish to JSR
         run: |
+          cd ${PACKAGE_FOLDER} # Navigate to the correct package folder
           echo "Publishing to JSR for package ${PACKAGE_SHORT_NAME}"
           npx jsr publish
