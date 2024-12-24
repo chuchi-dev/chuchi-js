@@ -4,14 +4,11 @@ on:
   push:
     tags:
       - '*@v*.*.*' # Trigger on tags like chuchi@v1.0.1, core@v1.2.0, legacy@v1.3.0
-  workflow_run:
-    workflows: ['CI']
-    types:
-      - completed
 
 jobs:
   publish:
     runs-on: self-hosted
+    needs: [CI]
     permissions:
       contents: read # Allow reading the repository content
       id-token: write # Required for provenance and JSR authentication
@@ -50,7 +47,7 @@ jobs:
         run: |
           cd ${PACKAGE_FOLDER} # Navigate to the correct package folder
           echo "Publishing package from ${PACKAGE_FOLDER} with version ${VERSION}"
-          npm publish --provenance --tag "${VERSION}"
+          npm publish --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
