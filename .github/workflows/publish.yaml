@@ -8,7 +8,6 @@ on:
 jobs:
   publish:
     runs-on: self-hosted
-    needs: [CI]
     permissions:
       contents: read # Allow reading the repository content
       id-token: write # Required for provenance and JSR authentication
@@ -36,6 +35,11 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
+
+      - name: Run lint
+        run: |
+          cd ${PACKAGE_FOLDER}
+          npm run lint
 
       - name: Build Package
         run: |
