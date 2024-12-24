@@ -1,0 +1,50 @@
+name: Publish Package
+
+on:
+  push:
+    tags:
+      - '*@v*.*.*' # Trigger on tags like chuchi@v1.0.1, core@v1.2.0, legacy@v1.3.0
+
+jobs:
+  publish:
+    runs-on: self-hosted
+    permissions:
+      contents: read # Allow reading the repository content
+      id-token: write # Required for provenance and JSR authentication
+    container:
+      image: node:20
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Parse Tag
+        id: parse_tag
+        run: |
+          # Extract the tag name (e.g., core@v1.2.0)
+          TAG_NAME="${GITHUB_REF##*/}"
+          PACKAGE_SHORT_NAME="${TAG_NAME%@*}"
+          VERSION="${TAG_NAME#*@}"
+          if [ "${PACKAGE_SHORT_NAME}" = "chuchi" ]; then
+            PACKAGE_FOLDER="chuchi" # Special case for chuchi
+          else
+            PACKAGE_FOLDER="chuchi-${PACKAGE_SHORT_NAME}" # Add prefix for other packages
+          fi
+          echo "PACKAGE_SHORT_NAME=${PACKAGE_SHORT_NAME}" >> $GITHUB_ENV
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "PACKAGE_FOLDER=${PACKAGE_FOLDER}" >> $GITHUB_ENV
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Publish to npm
+        run: |
+          cd ${PACKAGE_FOLDER} # Navigate to the correct package folder
+          echo "Publishing package from ${PACKAGE_FOLDER} with version ${VERSION}"
+          npm publish --provenance --tag "${VERSION}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to JSR
+        run: |
+          echo "Publishing to JSR for package ${PACKAGE_SHORT_NAME}"
+          npx jsr publish
