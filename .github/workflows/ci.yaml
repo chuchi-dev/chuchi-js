@@ -8,10 +8,7 @@ on:
 
 jobs:
   lint:
-    runs-on: self-hosted
-
-    container:
-      image: node:20
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
