@@ -4,6 +4,10 @@ on:
   push:
     tags:
       - '*@v*.*.*' # Trigger on tags like chuchi@v1.0.1, core@v1.2.0, legacy@v1.3.0
+  workflow_run:
+    workflows: ['CI']
+    types:
+      - completed
 
 jobs:
   publish:
@@ -35,6 +39,12 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
+
+      - name: Build Package
+        run: |
+          cd ${PACKAGE_FOLDER} # Navigate to the correct package folder
+          echo "Building package from ${PACKAGE_FOLDER}"
+          npm run build
 
       - name: Publish to npm
         run: |
