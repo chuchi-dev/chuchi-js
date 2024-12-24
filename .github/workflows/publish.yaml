@@ -55,6 +55,8 @@ jobs:
         run: |
           cd ${PACKAGE_FOLDER} # Navigate to the correct package folder
           echo "Building package from ${PACKAGE_FOLDER}"
+          cp ../LICENSE-APACHE .
+          cp ../LICENSE-MIT .
           npm run build
 
       - name: Publish to npm
