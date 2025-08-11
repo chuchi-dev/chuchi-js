@@ -3,7 +3,7 @@ name: Publish Package
 on:
   push:
     tags:
-      - '*@v*.*.*' # Trigger on tags like chuchi@v1.0.1, core@v1.2.0, legacy@v1.3.0
+      - "*@v*.*.*" # Trigger on tags like chuchi@v1.0.1, core@v1.2.0, legacy@v1.3.0
 
 jobs:
   publish:
@@ -38,13 +38,21 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "20.x"
+          registry-url: "https://registry.npmjs.org"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Install Dependencies
         run: npm ci
+
+      - name: Run build
+        run: npm run build
+
+      - name: Run check
+        run: |
+          cd ${PACKAGE_FOLDER}
+          npm run check
 
       - name: Run lint
         run: |
@@ -65,8 +73,8 @@ jobs:
           echo "Publishing package from ${PACKAGE_FOLDER} with version ${VERSION}"
           npm publish --provenance
 
-      - name: Publish to JSR
-        run: |
-          cd ${PACKAGE_FOLDER} # Navigate to the correct package folder
-          echo "Publishing to JSR for package ${PACKAGE_SHORT_NAME}"
-          npx jsr publish
+      # - name: Publish to JSR
+      #   run: |
+      #     cd ${PACKAGE_FOLDER} # Navigate to the correct package folder
+      #     echo "Publishing to JSR for package ${PACKAGE_SHORT_NAME}"
+      #     npx jsr publish
