@@ -30,11 +30,11 @@ async function defaultRequestListener(req: Request, routing: RoutingHandler) {
 	}, 100);
 }
 
-export default class Router {
+export default class Router<C = any> {
 	/**
 	 * All routes
 	 */
-	routes: Route[];
+	routes: Route<C>[];
 
 	/**
 	 * newRequest is a store which stores the request which is not completed
@@ -70,17 +70,19 @@ export default class Router {
 	 *
 	 * @param uri should either be a string or a Regex object with
 	 * named groups
-	 * @param loadComp should be function which loads a svelte
-	 * component
+	 * @param loadComp should be function which loads a component
 	 */
-	register(uri: string | RegExp, loadComp: (req: Request) => Promise<any>) {
+	register(
+		uri: string | RegExp,
+		loadComp: (req: Request) => Promise<C>,
+	): Route<C> {
 		return this.registerRoute(new Route(uri, loadComp));
 	}
 
 	/**
 	 * Registers a route
 	 */
-	registerRoute(route: Route) {
+	registerRoute(route: Route<C>): Route<C> {
 		this.routes.push(route);
 		return route;
 	}
@@ -109,10 +111,10 @@ export default class Router {
 	onRoute(
 		fn: (
 			req: Request,
-			route: Route | null,
+			route: Route<C> | null,
 			routing: RoutingHandler,
 		) => void,
-	) {
+	): () => void {
 		return this.onRequest((req, ready) => {
 			const route = this.route(req);
 			fn(req, route, ready);
@@ -122,7 +124,7 @@ export default class Router {
 	/**
 	 * Setup Router on the client
 	 */
-	initClient() {
+	initClient(): Request {
 		const req = Request.fromCurrent();
 		this.openReq(req, { history: 'none', checkCurrent: false });
 		this._listen();
@@ -147,7 +149,7 @@ export default class Router {
 	/**
 	 * Replaces the state of the current request
 	 */
-	replaceState(state: any = {}) {
+	replaceState(state: any = {}): void {
 		this.currentRequest.get().state = state;
 		window.history.replaceState(
 			this.currentRequest.get().toHistoryState(),
@@ -159,7 +161,7 @@ export default class Router {
 	/**
 	 * This is only intended to be used if you wan't to modify the history state without triggering a routeChange Event
 	 */
-	pushReq(req: Request) {
+	pushReq(req: Request): void {
 		this.currentRequest.setSilent(req);
 		window.history.pushState(req.toHistoryState(), '', req.uri);
 		this.currentRequest.notify();
@@ -168,7 +170,7 @@ export default class Router {
 	/**
 	 * replace the current Request without triggering any events
 	 */
-	replaceReq(req: Request) {
+	replaceReq(req: Request): void {
 		this.currentRequest.setSilent(req);
 		window.history.replaceState(req.toHistoryState(), '', req.uri);
 		this.currentRequest.notify();
@@ -185,7 +187,7 @@ export default class Router {
 	/**
 	 * Goes back a step in the history
 	 */
-	back() {
+	back(): void {
 		return window.history.back();
 	}
 
@@ -193,7 +195,7 @@ export default class Router {
 	 * This triggers the onRequest
 	 * always reloads even if the page might be the same
 	 */
-	reload() {
+	reload(): void {
 		const req = this.currentRequest.get();
 		if (!req) throw new Error('router does not have a current request');
 		this.openReq(req.clone(), { history: 'replace', checkCurrent: false });
@@ -202,7 +204,7 @@ export default class Router {
 	/**
 	 * tries to get the route by the request
 	 */
-	route(req: Request): Route | null {
+	route(req: Request): Route<C> | null {
 		return this.routes.find(r => r.check(req)) ?? null;
 	}
 
@@ -286,7 +288,7 @@ export default class Router {
 	 * @param {any} state some data which should persist page loads
 	 * @param {Object} opts `{ origin, scrollY, history, checkCurrent }`
 	 */
-	open(url: string, state?: any, opts: OpenOptions = {}) {
+	open(url: string, state?: any, opts: OpenOptions = {}): void {
 		if (!opts?.origin) opts.origin = 'manual';
 		const req = this._urlToRequest(url, state, opts);
 		if (!req) return;

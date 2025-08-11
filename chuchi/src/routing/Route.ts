@@ -1,9 +1,9 @@
 import Request from './Request.js';
 
-export default class Route {
+export default class Route<C = any> {
 	uri: string | RegExp;
 	private isRegex: boolean;
-	private loadComp: (req: Request) => Promise<any>;
+	private loadComp: (req: Request) => Promise<C>;
 
 	/**
 	 * Creates a new route
@@ -11,10 +11,7 @@ export default class Route {
 	 * @param uri The uri of the route can be a string or a regular expression with named groups
 	 * @param loadComp The component to be loaded when the route is matched
 	 */
-	constructor(
-		uri: string | RegExp,
-		loadComp: (req: Request) => Promise<any>,
-	) {
+	constructor(uri: string | RegExp, loadComp: (req: Request) => Promise<C>) {
 		this.uri = uri;
 		this.isRegex = typeof this.uri !== 'string';
 		this.loadComp = loadComp;
@@ -74,7 +71,7 @@ export default class Route {
 	/**
 	 * Loads the component corresponding to this route
 	 */
-	async load(req: Request) {
+	async load(req: Request): Promise<C> {
 		return await this.loadComp(req);
 	}
 }
