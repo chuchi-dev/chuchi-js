@@ -73,8 +73,8 @@ jobs:
           echo "Publishing package from ${PACKAGE_FOLDER} with version ${VERSION}"
           npm publish --provenance
 
-      # - name: Publish to JSR
-      #   run: |
-      #     cd ${PACKAGE_FOLDER} # Navigate to the correct package folder
-      #     echo "Publishing to JSR for package ${PACKAGE_SHORT_NAME}"
-      #     npx jsr publish
+      - name: Publish to JSR
+        run: |
+          cd ${PACKAGE_FOLDER} # Navigate to the correct package folder
+          echo "Publishing to JSR for package ${PACKAGE_SHORT_NAME}"
+          npx jsr publish
