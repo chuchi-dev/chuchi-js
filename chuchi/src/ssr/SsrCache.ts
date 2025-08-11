@@ -21,7 +21,7 @@ export default class SsrCache {
 	/**
 	 * Returns the value from the cache
 	 */
-	get(key: string) {
+	get<T = any>(key: string): T | null {
 		return this.store[key] ?? null;
 	}
 

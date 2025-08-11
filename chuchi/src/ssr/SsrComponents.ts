@@ -17,7 +17,7 @@ export default class SsrComponents {
 	/**
 	 * Returns preload for js and link stylesheet for css
 	 */
-	toHead(ssrManifest: Record<string, string[]>) {
+	toHead(ssrManifest: Record<string, string[]>): string {
 		const requirements = new Set<string>();
 		for (const mod of this.modules) {
 			const deps = ssrManifest[mod] ?? [];

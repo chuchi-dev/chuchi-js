@@ -138,7 +138,7 @@ export default class Router<C = any> {
 	/**
 	 * Setup Router on the server
 	 */
-	initServer(url: string) {
+	initServer(url: string): Request {
 		const req = new Request(new URL(url));
 		this.newRequest.set(req);
 		this.currentRequest.set(req);
