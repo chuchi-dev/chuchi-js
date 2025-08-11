@@ -20,6 +20,9 @@ jobs:
       - name: Check prettier
         run: npm run check-fmt
 
+      - name: Build
+        run: npm run build
+
       - name: Check
         run: npm run check
 
