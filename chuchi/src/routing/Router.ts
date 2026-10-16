@@ -300,12 +300,7 @@ export default class Router<C = any> {
 		window.addEventListener('click', e => {
 			// @ts-ignore
 			const link = e.target.closest('a');
-			const openInNewTab = e.metaKey || e.ctrlKey || e.shiftKey;
-			const saveLink = e.altKey;
-			if (!link || !link.href || openInNewTab || saveLink) return;
-
-			const target = link?.target ?? '';
-			if (target.toLowerCase() === '_blank') return;
+			if (!shouldInterceptClick(e, link)) return;
 
 			const req = this._urlToRequest(link.href, {}, { origin: 'click' });
 			if (!req) return;
@@ -363,4 +358,21 @@ export default class Router<C = any> {
 
 		return new Request(nUrl, state, opts);
 	}
+}
+
+/**
+ * Returns true if the click should be intercepted
+ */
+function shouldInterceptClick(
+	e: MouseEvent,
+	link: HTMLAnchorElement | null,
+): boolean {
+	const openInNewTab = e.metaKey || e.ctrlKey || e.shiftKey;
+	const saveLink = e.altKey;
+	if (!link || !link.href || openInNewTab || saveLink) return false;
+	if (link.target.toLowerCase() === '_blank') return false;
+	if (link.hasAttribute('download')) return false;
+	if (!link.href.startsWith('http')) return false;
+
+	return true;
 }
