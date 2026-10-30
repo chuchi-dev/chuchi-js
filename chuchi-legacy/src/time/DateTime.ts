@@ -113,8 +113,12 @@ export default class DateTime {
 	get week(): number {
 		const nearestThursday = this.cloneDay();
 		nearestThursday.raw.setDate(this.date + 4 - this.dayMoToSu);
-		const firstDay = new DateTime(new Date(this.year, 0, 1));
-		const days = (nearestThursday.time - firstDay.time) / DAY_IN_MS;
+		// the week belongs to the year of its thursday
+		const firstDay = new DateTime(new Date(nearestThursday.year, 0, 1));
+		// round because of daylight saving time
+		const days = Math.round(
+			(nearestThursday.time - firstDay.time) / DAY_IN_MS,
+		);
 		return Math.ceil((days + 1) / 7);
 	}
 

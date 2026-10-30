@@ -68,9 +68,11 @@ export default class Duration {
 		}
 
 		if (days < 1) return null;
-		if (days < 7) return intInfo(pre, days, words.day);
+		// compare rounded values, 6.6 days should be a week not 7 days
+		if (Math.round(days) < 7) return intInfo(pre, days, words.day);
 		if (days < 30) return intInfo(pre, days / 7, words.week);
-		if (days < 30 * 12) return intInfo(pre, days / 30, words.month);
+		if (Math.round(days / 30) < 12)
+			return intInfo(pre, days / 30, words.month);
 		return intInfo(pre, days / (30 * 12), words.year);
 	}
 
@@ -90,8 +92,11 @@ export default class Duration {
 			secs *= -1;
 		}
 
-		if (secs < 60) return intInfo(pre, secs, words.second);
-		if (secs < 60 * 60) return intInfo(pre, secs / 60, words.minute);
+		// compare rounded values, 59.6 seconds should be a minute not 60
+		// seconds
+		if (Math.round(secs) < 60) return intInfo(pre, secs, words.second);
+		if (Math.round(secs / 60) < 60)
+			return intInfo(pre, secs / 60, words.minute);
 
 		// because days > 1 get filtered out before
 		// this must be in hours

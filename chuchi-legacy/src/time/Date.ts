@@ -64,7 +64,17 @@ export default class Date {
 			return;
 		}
 
-		this.raw = new globalThis.Date(date);
+		// js parses YYYY-MM-DD as utc, but this is a local date, west of utc
+		// it would become the previous day
+		const ymd =
+			typeof date === 'string'
+				? /^(\d{4})-(\d{2})-(\d{2})$/.exec(date)
+				: null;
+		if (ymd) {
+			this.raw = new globalThis.Date(+ymd[1], +ymd[2] - 1, +ymd[3]);
+		} else {
+			this.raw = new globalThis.Date(date);
+		}
 
 		// @ts-ignore
 		if (isNaN(this.raw)) {
@@ -117,8 +127,14 @@ export default class Date {
 	get week(): number {
 		const nearestThursday = this.clone();
 		nearestThursday.raw.setDate(this.date + 4 - this.dayMoToSu);
-		const firstDay = new Date(new globalThis.Date(this.year, 0, 1));
-		const days = (nearestThursday.time - firstDay.time) / DAY_IN_MS;
+		// the week belongs to the year of its thursday
+		const firstDay = new Date(
+			new globalThis.Date(nearestThursday.year, 0, 1),
+		);
+		// round because of daylight saving time
+		const days = Math.round(
+			(nearestThursday.time - firstDay.time) / DAY_IN_MS,
+		);
 		return Math.ceil((days + 1) / 7);
 	}
 
