@@ -165,7 +165,7 @@ export default class Router<C = any> {
 	 */
 	pushReq(req: Request): void {
 		this.currentRequest.setSilent(req);
-		window.history.pushState(req.toHistoryState(), '', req.uri);
+		window.history.pushState(req.toHistoryState(), '', historyUrl(req));
 		this.currentRequest.notify();
 	}
 
@@ -174,7 +174,7 @@ export default class Router<C = any> {
 	 */
 	replaceReq(req: Request): void {
 		this.currentRequest.setSilent(req);
-		window.history.replaceState(req.toHistoryState(), '', req.uri);
+		window.history.replaceState(req.toHistoryState(), '', historyUrl(req));
 		this.currentRequest.notify();
 	}
 
@@ -273,9 +273,13 @@ export default class Router<C = any> {
 		}
 
 		if (history === 'replace') {
-			window.history.replaceState(req.toHistoryState(), '', req.uri);
+			window.history.replaceState(
+				req.toHistoryState(),
+				'',
+				historyUrl(req),
+			);
 		} else if (history === 'push') {
-			window.history.pushState(req.toHistoryState(), '', nUri);
+			window.history.pushState(req.toHistoryState(), '', historyUrl(req));
 		}
 
 		this.currentRequest.set(req);
@@ -401,6 +405,16 @@ export default class Router<C = any> {
 
 		return new Request(nUrl, state, opts);
 	}
+}
+
+/**
+ * Returns the url to store in the history
+ *
+ * The uri alone is not enough, a path starting with // would be read as
+ * another host and pushState would throw
+ */
+function historyUrl(req: Request): string {
+	return window.location.origin + req.uri;
 }
 
 /**
