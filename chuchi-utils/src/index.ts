@@ -82,14 +82,10 @@ export function randomToken(length: number = 8): string {
  * @param step - The step size between values, defaults to 1.
  * @returns The generated array.
  */
-// todo improve this function
 export function range(start: number, end: number, step: number = 1): number[] {
-	const len = end - start / step;
-	const ar = new Array(len);
-	let c = 0;
+	const ar = [];
 	for (let i = start; i < end; i += step) {
-		ar[c] = i;
-		c += 1;
+		ar.push(i);
 	}
 	return ar;
 }
