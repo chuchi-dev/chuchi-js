@@ -14,7 +14,8 @@ export default class GraphQl {
 	): Promise<any> {
 		if (!this.url) throw GraphQlError.newOther('GraphQl url not defined');
 
-		headers['content-type'] = 'application/json';
+		// don't modify the headers of the caller
+		headers = { ...headers, 'content-type': 'application/json' };
 
 		let resp;
 		try {
@@ -27,7 +28,19 @@ export default class GraphQl {
 				}),
 			});
 
-			const json = await resp.json();
+			let json;
+			try {
+				json = await resp.json();
+			} catch (e) {
+				// for example an html error page from a proxy
+				if (!resp.ok)
+					throw new GraphQlError(
+						'NotOk',
+						'response code ' + resp.status,
+					);
+				throw e;
+			}
+
 			if (
 				'errors' in json &&
 				Array.isArray(json.errors) &&
