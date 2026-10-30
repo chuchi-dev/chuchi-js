@@ -16,7 +16,7 @@
 		"type": "git",
 		"url": "https://github.com/chuchi-dev/chuchi-js"
 	},
-	"license": "MIT or Apache-2.0",
+	"license": "MIT OR Apache-2.0",
 	"exports": {
 		"./api/Api": "./dist/api/Api.js",
 		"./api/ApiError": "./dist/api/ApiError.js",
