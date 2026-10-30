@@ -47,11 +47,17 @@ export default class ApiError {
 	static fromJson(obj: any): ApiError {
 		if (typeof obj === 'string') return new ApiError(obj, null);
 
+		// for example null if the response was not json
+		if (!obj || typeof obj !== 'object')
+			return ApiError.newOther('unexpected error response: ' + obj);
+
 		// {kind, data}
 		if ('kind' in obj) return new ApiError(obj.kind, obj?.data ?? null);
 
 		// {'kind': data}
-		const [kind, data] = Object.entries(obj)[0];
+		const entry = Object.entries(obj)[0];
+		if (!entry) return ApiError.newOther('empty error response');
+		const [kind, data] = entry;
 		return new ApiError(kind, data);
 	}
 

@@ -71,7 +71,8 @@ export default class SlotArray<T> {
 	 * @param id - The index to remove the item from.
 	 */
 	remove(id: number) {
-		if (this.inner.length <= id) return;
+		// removing twice would add the slot twice to free
+		if (this.inner.length <= id || this.inner[id] === null) return;
 
 		this.inner[id] = null;
 		this.free.push(id);

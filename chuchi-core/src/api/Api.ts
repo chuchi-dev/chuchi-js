@@ -57,6 +57,8 @@ export default class Api {
 		// todo: there might still be an issue with relative and absolute
 		// paths, but i'm not sure fetch supports relative paths?
 		const url = new URL(this.addr + path, DEF_ORIGIN);
+		const isGet = method.toLowerCase() === 'get';
+		if (isGet) setSearchParams(url, data);
 
 		try {
 			const fetchParams = {
@@ -67,33 +69,30 @@ export default class Api {
 			fetchParams.headers['content-type'] = 'application/json';
 
 			// don't send a body if the method is get
-			if (method.toLowerCase() === 'get') {
-				const searchParams = url.searchParams;
+			if (!isGet) fetchParams.body = JSON.stringify(data);
 
-				for (const [key, value] of Object.entries(data ?? {})) {
-					if (value !== undefined && value !== null)
-						searchParams.set(key, value);
-				}
-			} else {
-				fetchParams.body = JSON.stringify(data);
-			}
-
-			let urlStr = url.toString();
-			if (urlStr.startsWith(DEF_ORIGIN))
-				urlStr = urlStr.substring(DEF_ORIGIN.length);
-
-			const resp = await fetch(urlStr, fetchParams);
+			const resp = await fetch(urlToString(url), fetchParams);
 
 			opts.responseStatus = resp.status;
 			opts.responseHeaders = resp.headers;
 
-			if (resp.ok) {
-				return await resp.json();
-			} else {
-				// we've got and error
-				const errObj = await resp.json();
-				err = ApiError.fromJson(errObj);
+			// the body might be empty (204) or not json (an html error page)
+			const text = await resp.text();
+			let json = null;
+			let isJson = true;
+			try {
+				json = text ? JSON.parse(text) : null;
+			} catch (e) {
+				if (resp.ok) throw e;
+				isJson = false;
 			}
+
+			if (resp.ok) return json;
+
+			// we've got and error
+			err = isJson
+				? ApiError.fromJson(json)
+				: ApiError.newOther('response code ' + resp.status);
 		} catch (e: any) {
 			console.error('request error raw', e);
 			err = ApiError.newOther(e.message);
@@ -135,11 +134,11 @@ export default class Api {
 				prog(100);
 
 				// should probably be a json object now
-				if (req.status === 200) {
+				if (isOk(req.status)) {
 					res(req.response);
 				} else {
 					try {
-						err(ApiError.fromJson(req.response));
+						err(xhrError(req));
 					} catch (e: any) {
 						err(ApiError.newOther(e.message));
 					}
@@ -201,11 +200,11 @@ export default class Api {
 
 			req.addEventListener('load', () => {
 				// should probably be a json object now
-				if (req.status === 200) {
+				if (isOk(req.status)) {
 					res(req.response);
 				} else {
 					try {
-						err(ApiError.fromJson(req.response));
+						err(xhrError(req));
 					} catch (e: any) {
 						err(ApiError.newOther(e.message));
 					}
@@ -222,8 +221,13 @@ export default class Api {
 				err(ApiError.newOther('requestTimeout network failure'));
 			});
 
+			// like request, get sends the data as query params
+			const isGet = method.toLowerCase() === 'get';
+			const url = new URL(this.addr + path, DEF_ORIGIN);
+			if (isGet) setSearchParams(url, data);
+
 			// open request
-			req.open(method, this.addr + path);
+			req.open(method, urlToString(url));
 
 			// add headers
 			req.setRequestHeader('content-type', 'application/json');
@@ -234,7 +238,7 @@ export default class Api {
 
 			let body = null;
 			// don't send a body if the method is get
-			if (method.toLowerCase() !== 'get') {
+			if (!isGet) {
 				body = JSON.stringify(data);
 			}
 
@@ -242,4 +246,29 @@ export default class Api {
 			req.send(body);
 		});
 	}
+}
+
+function isOk(status: number): boolean {
+	return status >= 200 && status < 300;
+}
+
+function setSearchParams(url: URL, data: object | null) {
+	for (const [key, value] of Object.entries(data ?? {})) {
+		if (value !== undefined && value !== null)
+			url.searchParams.set(key, value);
+	}
+}
+
+function urlToString(url: URL): string {
+	const urlStr = url.toString();
+	if (urlStr.startsWith(DEF_ORIGIN))
+		return urlStr.substring(DEF_ORIGIN.length);
+	return urlStr;
+}
+
+function xhrError(req: XMLHttpRequest): ApiError {
+	// the response is null if it was not json
+	if (req.response === null)
+		return ApiError.newOther('response code ' + req.status);
+	return ApiError.fromJson(req.response);
 }
