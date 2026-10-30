@@ -11,7 +11,7 @@ export default class GraphQl {
 		query: string,
 		variables: Record<string, any> = {},
 		headers: Record<string, string> = {},
-	) {
+	): Promise<any> {
 		if (!this.url) throw GraphQlError.newOther('GraphQl url not defined');
 
 		headers['content-type'] = 'application/json';

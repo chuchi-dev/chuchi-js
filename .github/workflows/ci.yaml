@@ -34,3 +34,6 @@ jobs:
 
       - name: Run lint
         run: npm run lint
+
+      - name: Check JSR
+        run: npm run check-jsr

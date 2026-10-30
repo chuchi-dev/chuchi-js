@@ -39,7 +39,7 @@ export default class GraphQlError {
 		this.data = data;
 	}
 
-	static fromJson(json: any) {
+	static fromJson(json: any): GraphQlError {
 		let apiError = json.errors.find((e: any) => !!e.extensions?.apiError);
 		if (apiError)
 			apiError = ApiError.fromJson(apiError.extensions.apiError);
@@ -66,6 +66,6 @@ export default class GraphQlError {
 	__isGraphQlErrorObject__() {}
 }
 
-export function isGraphQlErrorObject(val: any) {
+export function isGraphQlErrorObject(val: any): boolean {
 	return typeof (val ? val.__isGraphQlErrorObject__ : null) === 'function';
 }

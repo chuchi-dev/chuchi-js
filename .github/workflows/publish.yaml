@@ -108,4 +108,5 @@ jobs:
         run: |
           cd ${PACKAGE_FOLDER} # Navigate to the correct package folder
           echo "Publishing to JSR for package ${PACKAGE_SHORT_NAME}"
-          npx jsr publish
+          # the copied licenses are not committed
+          npx jsr publish --allow-dirty
