@@ -1,4 +1,4 @@
-import { Cookies, SetOptions } from './index.js';
+import { Cookies, RemoveOptions, SetOptions } from './index.js';
 import { parseCookies, setCookieToString } from './utils.js';
 
 // the philosophy here is that document.cookie is the source of truth
@@ -14,13 +14,13 @@ export default class ClientCookies implements Cookies {
 	}
 
 	set(name: string, value: string, opts?: SetOptions): void {
-		const setCookie = { name, value, ...opts };
+		const setCookie = { name, value, path: '/', ...opts };
 
 		document.cookie = setCookieToString(setCookie);
 	}
 
-	remove(name: string): void {
-		this.set(name, '', { maxAge: 0 });
+	remove(name: string, opts?: RemoveOptions): void {
+		this.set(name, '', { ...opts, maxAge: 0 });
 	}
 }
 
