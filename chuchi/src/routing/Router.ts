@@ -42,6 +42,7 @@ export default class Router<C = any> {
 	newRequest: Writable<Request>;
 	private requestListener: (req: Request, routing: RoutingHandler) => void;
 	private newRequestVersion: number;
+	private scrollDebounceTimeout: any | null;
 
 	/**
 	 * currentRequest is a store which stores the current request
@@ -61,6 +62,7 @@ export default class Router<C = any> {
 		this.newRequest = new Writable(null as any);
 		this.requestListener = defaultRequestListener;
 		this.newRequestVersion = 0;
+		this.scrollDebounceTimeout = null;
 
 		this.currentRequest = new Writable(null as any);
 	}
@@ -255,6 +257,13 @@ export default class Router<C = any> {
 		if (await dataBarrier2.ready(hasVersionChange()))
 			return console.log('request overriden, version changed');
 
+		// a pending scroll update belongs to the previous request, the scroll
+		// position gets stored below
+		if (this.scrollDebounceTimeout) {
+			clearTimeout(this.scrollDebounceTimeout);
+			this.scrollDebounceTimeout = null;
+		}
+
 		// before we update the current Request let's store the scroll position
 		// don't store it if the request comes from a pop event because that
 		// means the history was already replaced
@@ -307,6 +316,19 @@ export default class Router<C = any> {
 
 			e.preventDefault();
 
+			// a link to the same page with a hash only scrolls to the target,
+			// there is no need to load the page again
+			const curr = this.currentRequest.get();
+			if (
+				curr &&
+				req.url.hash &&
+				curr.pathname === req.pathname &&
+				curr.url.search === req.url.search
+			) {
+				this._openHash(req, curr);
+				return;
+			}
+
 			this.openReq(req);
 		});
 
@@ -318,7 +340,6 @@ export default class Router<C = any> {
 			this.openReq(req, { history: 'none', checkCurrent: false });
 		});
 
-		let saveScrollTimeout: any;
 		window.addEventListener('scroll', () => {
 			const curr = this.currentRequest.get();
 			if (!curr) return;
@@ -326,17 +347,39 @@ export default class Router<C = any> {
 			// store the scroll position
 			curr.scrollY = window.scrollY;
 
-			if (saveScrollTimeout) return;
+			if (this.scrollDebounceTimeout) return;
 
-			saveScrollTimeout = setTimeout(() => {
+			this.scrollDebounceTimeout = setTimeout(() => {
+				// reset first, otherwise a request change would stop all
+				// further scroll updates
+				this.scrollDebounceTimeout = null;
+
 				if (curr.uri !== this.currentRequest.get().uri) return;
 
 				// request still the same, let's update the scroll position
 				window.history.replaceState(curr.toHistoryState(), '');
-
-				saveScrollTimeout = null;
 			}, 200);
 		});
+	}
+
+	private _openHash(req: Request, curr: Request) {
+		if (req.uri !== curr.uri) {
+			if (this.scrollDebounceTimeout) {
+				clearTimeout(this.scrollDebounceTimeout);
+				this.scrollDebounceTimeout = null;
+			}
+
+			// store the scroll position of the current request
+			curr.scrollY = window.scrollY;
+			window.history.replaceState(curr.toHistoryState(), '');
+
+			req.index = curr.index + 1;
+			req.scrollY = window.scrollY;
+			this.pushReq(req);
+		}
+
+		const el = document.getElementById(req.url.hash.substring(1));
+		el?.scrollIntoView({ behavior: 'smooth' });
 	}
 
 	/// returns null if the url does not match our host and protocol
