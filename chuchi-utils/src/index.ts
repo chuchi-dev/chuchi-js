@@ -83,9 +83,11 @@ export function randomToken(length: number = 8): string {
  * @returns The generated array.
  */
 export function range(start: number, end: number, step: number = 1): number[] {
-	const ar = [];
-	for (let i = start; i < end; i += step) {
-		ar.push(i);
+	// preallocating is a lot faster than push for bigger ranges
+	const len = step > 0 ? Math.max(0, Math.ceil((end - start) / step)) : 0;
+	const ar = new Array(len);
+	for (let c = 0; c < len; c++) {
+		ar[c] = start + c * step;
 	}
 	return ar;
 }
