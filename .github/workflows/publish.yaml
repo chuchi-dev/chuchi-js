@@ -11,7 +11,7 @@ jobs:
 
     permissions:
       contents: read # Allow reading the repository content
-      id-token: write # Required for provenance and JSR authentication
+      id-token: write # Required for Trusted Publishing, provenance and JSR
     container:
       image: node:24
 
@@ -101,8 +101,6 @@ jobs:
             echo "Stable release detected. Publishing to latest tag."
             npm publish --provenance
           fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # fallback if Trusted Publishing is not set up
 
       - name: Publish to JSR
         run: |
