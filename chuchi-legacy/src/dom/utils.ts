@@ -74,10 +74,8 @@ export function inViewY(el: Element) {
 	const wHeight = window.innerHeight;
 	const { top, bottom } = el.getBoundingClientRect();
 
-	const topInView = top >= 0 && top <= wHeight;
-	const bottomInView = bottom >= 0 && bottom <= wHeight;
-
-	return topInView || bottomInView;
+	// also true if the element is taller than the viewport and covers it
+	return top <= wHeight && bottom >= 0;
 }
 
 // name --my-var
