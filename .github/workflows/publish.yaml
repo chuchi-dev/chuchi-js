@@ -83,6 +83,14 @@ jobs:
         shell: bash
         run: |
           cd ${PACKAGE_FOLDER} # Navigate to the correct package folder
+
+          # allows to rerun a release if a later step failed
+          PKG_NAME=$(node -p "require('./package.json').name")
+          if npm view "${PKG_NAME}@${VERSION}" version > /dev/null 2>&1; then
+            echo "${PKG_NAME}@${VERSION} is already on npm, skipping"
+            exit 0
+          fi
+
           echo "Publishing package from ${PACKAGE_FOLDER} with version ${VERSION}"
 
           # Check if the version is a prerelease (contains a hyphen, e.g., 0.2.0-alpha.0)
@@ -105,6 +113,14 @@ jobs:
       - name: Publish to JSR
         run: |
           cd ${PACKAGE_FOLDER} # Navigate to the correct package folder
+
+          # allows to rerun a release if a later step failed
+          JSR_NAME=$(node -p "require('./jsr.json').name")
+          if node -e "fetch('https://jsr.io/${JSR_NAME}/meta.json').then(r => r.json()).then(m => process.exit(m.versions?.['${VERSION}'] ? 0 : 1)).catch(() => process.exit(1))"; then
+            echo "${JSR_NAME}@${VERSION} is already on JSR, skipping"
+            exit 0
+          fi
+
           echo "Publishing to JSR for package ${PACKAGE_SHORT_NAME}"
           # the copied licenses are not committed
           npx jsr publish --allow-dirty
