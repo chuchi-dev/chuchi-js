@@ -1,5 +1,5 @@
 // create element
-export function c(el: any, attrs: Record<string, any> = {}) {
+export function c(el: any, attrs: Record<string, any> = {}): any {
 	el = document.createElement(el);
 	Object.entries(attrs).forEach(([key, val]) => {
 		switch (key) {
@@ -30,7 +30,7 @@ export class CustomEl {
 }
 
 // append child
-export function a(to: Element, ...els: any[]) {
+export function a(to: Element, ...els: any[]): Element {
 	els.forEach(el => {
 		if (!el) return;
 
@@ -64,13 +64,13 @@ export function ct(to: Element, className: string, cond: boolean = null) {
 }
 
 // returns { x, y }
-export function offset(el: Element) {
+export function offset(el: Element): { x: number; y: number } {
 	const { left, top } = el.getBoundingClientRect();
 	return { x: left, y: top };
 }
 
 // left right is ignored
-export function inViewY(el: Element) {
+export function inViewY(el: Element): boolean {
 	const wHeight = window.innerHeight;
 	const { top, bottom } = el.getBoundingClientRect();
 
@@ -79,12 +79,12 @@ export function inViewY(el: Element) {
 }
 
 // name --my-var
-export function cssVar(name: string, el: Element = null) {
+export function cssVar(name: string, el: Element = null): string {
 	if (!el) el = document.documentElement;
 	return getComputedStyle(el).getPropertyValue(name);
 }
 
-export function fontSize(el: Element = null) {
+export function fontSize(el: Element = null): number {
 	if (!el) el = document.documentElement;
 	return parseFloat(getComputedStyle(el).fontSize);
 }
