@@ -1,18 +1,18 @@
 export default class SsrCache {
-	private store: Record<string, any>;
+	private store: Map<string, any>;
 
 	constructor() {
-		this.store = {};
+		this.store = new Map();
 
 		if (typeof window !== 'undefined' && 'SSR_STORE' in window)
-			this.store = window.SSR_STORE as any;
+			this.store = new Map(Object.entries(window.SSR_STORE as any));
 	}
 
 	/**
 	 * check if the value is in the cache else calls the fn
 	 */
 	async load<T>(key: string, fn: () => Promise<T>): Promise<T> {
-		if (key in this.store) return this.store[key];
+		if (this.store.has(key)) return this.store.get(key);
 		const v = await fn();
 		this.set(key, v);
 		return v;
@@ -22,28 +22,31 @@ export default class SsrCache {
 	 * Returns the value from the cache
 	 */
 	get<T = any>(key: string): T | null {
-		return this.store[key] ?? null;
+		return this.store.get(key) ?? null;
 	}
 
 	/**
 	 * Sets the value in the cache
 	 */
 	set<T>(key: string, val: T) {
-		this.store[key] = val;
+		this.store.set(key, val);
 	}
 
 	/**
 	 * Clears the cache
 	 */
 	clear() {
-		this.store = {};
+		this.store.clear();
 	}
 
 	/**
 	 * Returns the cache as json
 	 */
 	jsonStringify(): string {
-		return JSON.stringify(this.store).replaceAll('<', '\\u003c');
+		return JSON.stringify(Object.fromEntries(this.store)).replaceAll(
+			'<',
+			'\\u003c',
+		);
 	}
 
 	/**
