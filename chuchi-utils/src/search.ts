@@ -17,7 +17,7 @@ export function searchScore(search: string, val: string): number {
 	if (i === -1) return 0;
 
 	const distLeft = searchSpaceLeft(i, val);
-	const distRight = searchSpaceLeft(i + search.length, val);
+	const distRight = searchSpaceRight(i + search.length - 1, val);
 
 	return 1 + distLeft + distRight;
 }
@@ -35,9 +35,6 @@ function searchSpaceLeft(idx: number, val: string): number {
 }
 
 // calculate distance to space right of
-// todo is this used???
-// @ts-ignore
-/* eslint-disable @typescript-eslint/no-unused-vars */
 function searchSpaceRight(idx: number, val: string): number {
 	let dist = 0;
 	while (idx < val.length - 1) {
