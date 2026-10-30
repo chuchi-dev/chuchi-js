@@ -1,12 +1,14 @@
 {
 	"name": "@chuchi/legacy",
-	"version": "1.0.2",
+	"version": "1.1.1",
 	"license": "MIT or Apache-2.0",
 	"exports": {
 		"./time/Date": "./src/time/Date.ts",
 		"./time/DateTime": "./src/time/DateTime.ts",
 		"./time/DateTimeRange": "./src/time/DateTimeRange.ts",
 		"./time/Duration": "./src/time/Duration.ts",
-		"./time/localization": "./src/time/localization.ts"
+		"./time/localization": "./src/time/localization.ts",
+		"./dom/Context2d": "./src/dom/Context2d.ts",
+		"./dom/utils": "./src/dom/utils.ts"
 	}
 }
