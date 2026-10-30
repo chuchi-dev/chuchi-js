@@ -410,10 +410,14 @@ function shouldInterceptClick(
 	e: MouseEvent,
 	link: HTMLAnchorElement | null,
 ): boolean {
+	// another handler took care of it, or not the main button
+	if (e.defaultPrevented || e.button !== 0) return false;
 	const openInNewTab = e.metaKey || e.ctrlKey || e.shiftKey;
 	const saveLink = e.altKey;
 	if (!link || !link.href || openInNewTab || saveLink) return false;
-	if (link.target.toLowerCase() === '_blank') return false;
+	// another window or frame: _blank, _top, _parent or a named one
+	const target = link.target.toLowerCase();
+	if (target && target !== '_self') return false;
 	if (link.hasAttribute('download')) return false;
 	if (!link.href.startsWith('http')) return false;
 
