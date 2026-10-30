@@ -756,7 +756,6 @@ export class ReceiverManager {
 
 		// this loops is only used until we are connected or nobody is interested
 		// in an open channel
-		// eslint-disable-next-line no-constant-condition
 		while (true) {
 			if (this.listeners === 0) {
 				// all listeners are gone
