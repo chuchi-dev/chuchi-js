@@ -11,15 +11,20 @@
 		"build": "npm run build --workspaces",
 		"check": "npm run check --workspaces",
 		"check-fmt": "npm run check-fmt --workspaces",
+		"fmt": "npm run fmt --workspaces",
 		"lint": "npm run lint --workspaces",
 		"check-jsr": "npm run check-jsr --workspaces"
 	},
 	"devDependencies": {
-		"@eslint/js": "^9.4.0",
+		"@eslint/compat": "^1.4.1",
+		"@eslint/js": "^9.39.5",
 		"@types/eslint__js": "^8.42.3",
-		"eslint": "^8.45.0",
+		"eslint": "^9.39.5",
+		"eslint-config-prettier": "^9.1.2",
+		"globals": "^15.15.0",
 		"jsr": "^0.14.3",
 		"prettier": "^3.2.4",
-		"typescript-eslint": "^7.11.0"
+		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.72.1"
 	}
 }
