@@ -254,8 +254,12 @@ export default class Router<C = any> {
 
 		this.newRequest.set(req);
 		// if version changed
-		if (await dataBarrier2.ready(hasVersionChange()))
+		if (await dataBarrier2.ready(hasVersionChange())) {
+			// a listener may still wait for domReady: it ends too, with true
+			// like dataReady, instead of never
+			domBarrier2.ready(true);
 			return console.log('request overriden, version changed');
+		}
 
 		// a pending scroll update belongs to the previous request, the scroll
 		// position gets stored below
